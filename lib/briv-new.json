@@ -3,9 +3,9 @@
     "id": 1,
     "name": "Briv",
     "level": 5,
-    "currHP": 25,
-    "maxHP": 30,
-    "tempHP": 0,
+    "currHp": 25,
+    "maxHp": 30,
+    "tempHp": 0,
     "deathSaves": 0,
     "deathFails": 0,
     "classes": [
@@ -23,8 +23,8 @@
       "wisdom": 10,
       "charisma": 8
     },
-    "immunities": ["Fire"],
-    "resistances": ["Slashing"],
+    "immunities": [],
+    "resistances": ["Fire"],
     "vulnerabilites": [],
     "conditions": [],
     "items":[
