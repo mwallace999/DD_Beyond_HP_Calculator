@@ -1,4 +1,11 @@
-INTIAL COMMIT
+### INSTRUCTIONS
+### NOTES
+Changes to briv.json:
+ADD: tempHitPoints, conditions, deathSaves, deathFail
+EDIT: hitPoits --> currHitPoints / maxHitPoints
+
+
+### ORIGINAL INSTRUCTIONS
 # DDB Back End Developer Challenge
 
 ### Overview

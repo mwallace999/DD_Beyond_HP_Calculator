@@ -1,29 +1,62 @@
 const express = require('express');
 const app = express();
-const port = 3000; // You can choose any available port
+const port = 3000;
 
 app.use(express.json());
 
-const characters = require('./briv.json');
+const characters = require('./lib/briv-new.json');
 
+const getCharacter = (id) => characters.find(char => char.id === id);
+
+const removeCondition = (char, condition) => char.conditions = char.conditions.filter(cond => cond !== condition);
+
+const addCondition = (char, condition) => !char.conditions.includes(condition) && char.conditions.push(condition);
+
+
+// Dummy endpoint
 app.get('/test', (req, res) => {
-    // Update character HP based on the damage type and amount
-    // Respond with the updated character data
-    res.json({ message: 'Hitting Test API' });
-  })
+  res.json({ message: 'Hitting Test API'});
+})
+
+// Get character data by id
+app.get('/character/:id', (req, res) => {
+  const { id } = req.params;
+  const activeChar = getCharacter(Number(id));
+  // Respond with character data
+  res.json({ message: 'Hitting Get Character API', character: activeChar});
+})
 
 // API route for dealing damage
 app.post('/deal-damage', (req, res) => {
+  const { id, damage, type, isCrit } = req.body;
+  const activeChar = getCharacter(id);
+  console.log(activeChar.currHP)
+
+  activeChar.currHP -= damage;
+  addCondition(activeChar, "Poisoned")
+  console.log(activeChar)
   // Update character HP based on the damage type and amount
   // Respond with the updated character data
   res.json({ message: 'Damage dealt successfully' });
 });
 
-// API route for healing
+// Heal a character
 app.post('/heal', (req, res) => {
-  // Update character HP based on the amount of healing
+  const { id, health } = req.body;
+  const activeChar = getCharacter(id);
+  let message = '';
+
+  if (activeChar.currHP === activeChar.maxHP) {
+    console.log(`${activeChar.name} is already at MAX health (${activeChar.currHP} HP)`)
+    message = 'Character is at max health';
+  }
+  else {
+    activeChar.currHP = Math.min(activeChar.currHP + health, activeChar.maxHP);
+    console.log(`${activeChar.name} was healed to ${activeChar.currHP} HP`)
+    message = 'Healing applied successfully';
+  }
   // Respond with the updated character data
-  res.json({ message: 'Healing applied successfully' });
+  res.json({ message, character: activeChar });
 });
 
 // API route for adding temporary Hit Points

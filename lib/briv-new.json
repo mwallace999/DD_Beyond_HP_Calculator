@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "name": "Briv",
+    "level": 5,
+    "currHP": 25,
+    "maxHP": 30,
+    "tempHP": 0,
+    "deathSaves": 0,
+    "deathFails": 0,
+    "classes": [
+      {
+      "class": "Fighter",
+      "hitDiceValue": 10,
+      "classLevel": 5
+      }
+    ],
+    "stats":{
+      "strength": 15,
+      "dexterity": 12,
+      "constitution": 14,
+      "intelligence": 13,
+      "wisdom": 10,
+      "charisma": 8
+    },
+    "immunities": ["Fire"],
+    "resistances": ["Slashing"],
+    "vulnerabilites": [],
+    "conditions": [],
+    "items":[
+      {
+        "name": "Ioun Stone of Fortitude",
+        "modifier": {
+          "affectedObject": "stats",
+          "affectedValue": "constitution",
+          "value":2
+        }
+      }
+    ]
+  }
+]
