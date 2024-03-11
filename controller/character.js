@@ -62,40 +62,39 @@ export const heal = (character, health) => {
 // *** DEAL DAMAGE ***
 export const dealDamage = (character, damage, type, isCrit) => {
   let message = `${character.name} is attacked with ${damage} point(s) of ${type} damage. `;
-  let modDamage = damage;
 
   // Calculate modified damage
   // Check resistences
   if (character.resistances.includes(type)) {
-    modDamage = Math.floor(modDamage / 2);
-    message += `${character.name} is resistant to ${type} damage. Incoming damage is halved to ${modDamage}. `;
+    damage = Math.floor(damage / 2);
+    message += `${character.name} is resistant to ${type} damage. Incoming damage is halved to ${damage}. `;
   }
   // Check vulnerabilities
   if (character.vulnerabilites.includes(type)) {
-    modDamage *= 2;
-    message += `${character.name} is vulnerable to ${type} damage. Incoming damage is doubled to ${modDamage}. `;
+    damage *= 2;
+    message += `${character.name} is vulnerable to ${type} damage. Incoming damage is doubled to ${damage}. `;
   }
   // Check immunities
   if (character.immunities.includes(type)) {
-    modDamage = 0;
+    damage = 0;
     message += `${character.name} is immune to ${type} damage. No damage is taken. `;
   }
 
   // Handle tempHp if applicable
-  if (modDamage && character.tempHp) {
+  if (damage && character.tempHp) {
     // Determine new tempHp value
-    const newTempHp = Math.max(character.tempHp - modDamage, 0);
+    const newTempHp = Math.max(character.tempHp - damage, 0);
     message += `${character.tempHp - newTempHp} point(s) of damage are absorbed by tempHp. ${newTempHp} tempHp remaining. `;
     // Determine remaining damage value
-    modDamage = Math.max(modDamage - character.tempHp, 0);
+    damage = Math.max(damage - character.tempHp, 0);
     // Update tempHp
     character.tempHp = newTempHp;
   }
   
-  // handle remaining damage
-  if (modDamage) {
-    message += `${character.name} takes ${modDamage} point(s) of ${type} damage. `
-    const newHp = character.currHp - modDamage;
+  // Handle remaining damage
+  if (damage) {
+    message += `${character.name} takes ${damage} point(s) of ${type} damage. `
+    const newHp = character.currHp - damage;
 
     // Handle damage to a Dead character
     if (character.conditions.includes('Dead')) {
@@ -112,16 +111,9 @@ export const dealDamage = (character, damage, type, isCrit) => {
     }
     // Handle damage to an Unconcious character
     else if (character.currHp === 0) {
-      // Critical Hit
-      if (isCrit) {
-        character.deathFails += 2;
-        message += `${character.name} suffers a Critical Hit while unconcious and fails 2 Death Saves. `   
-      } 
-      // Normal Hit
-      else {
-        character.deathFails++;
-        message += `${character.name} suffers a Hit while unconcious and fails 1 Death Save. `
-      }
+      // Check if critical and increase Death Saves
+      character.deathFails += isCrit ? 2 : 1;
+      message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while unconcious and fails ${isCrit ? 2 : 1} Death Saves. `
       message += `${character.name} now has ${Math.min(character.deathFails, 3)} failed Death Saves. `
       // Check if Dead
       if (character.deathFails >= 3) {
@@ -131,7 +123,6 @@ export const dealDamage = (character, damage, type, isCrit) => {
         removeCondition(character, 'Unconscious');
         addCondition(character, 'Dead');
       }
-      
     }
     // Handle reducing character to 0 HP
     else if (newHp <= 0) {
