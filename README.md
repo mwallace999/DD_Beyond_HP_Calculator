@@ -1,9 +1,65 @@
 ### INSTRUCTIONS
-### NOTES
-Changes to briv.json:
-ADD: tempHitPoints, conditions, deathSaves, deathFail
-EDIT: hitPoits --> currHitPoints / maxHitPoints
 
+`npm install` Installs node module dependencies
+`npm start` Runs the app in a production environment on localhost
+`npm run dev` Runs the app in a development environment using nodemon to monitor file changes
+
+### NOTES
+
+Changes to briv.json:
+- Changed structure to array of character jsons instead of a single character
+- Added 'id' field as primary key in place of 'name'
+- Added fields: 'tempHp', 'conditions', 'deathSaves', 'deathFails'
+- Changed field 'hitPoints' --> 'currHp' / 'maxHp'
+- Changed 'defenses' object to separate 'resistances', 'immunities', 'vulnerabilities' fields
+
+### ENDPOINTS
+
+ENDPOINT: POST http://localhost:3000/character/deal-damage
+PURPOSE: Handles dealing damage to a character
+PAYLOAD: {
+    id: INT (unique character id),
+    damage: INT (value of damage being dealt),
+    type: STRING (type of damage dealt),
+    isCrit: BOOL (is strike a critical hit)
+}
+RESPONSE: {
+    message: STRING (record of resulting effects from damage),
+    character: JSON (character state after damage is resolved)
+}
+----------------------------------------------------------------
+ENDPOINT: POST http://localhost:3000/character/heal
+PURPOSE: Handles healing a character
+PAYLOAD: {
+    id: INT (unique character id),
+    health: INT (value of health being healed),
+}
+RESPONSE: {
+    message: STRING (record of resulting effects from healing),
+    character: JSON (character state after healing is resolved)
+}
+----------------------------------------------------------------
+ENDPOINT: POST http://localhost:3000/character/add-temp-hp
+PURPOSE: Handles granting tempHp to a character
+PAYLOAD: {
+    id: INT (unique character id),
+    tempHp: INT (value of tempHp being granted),
+}
+RESPONSE: {
+    message: STRING (record of resulting effects from granting tempHp),
+    character: JSON (character state after tempHp is resolved)
+}
+----------------------------------------------------------------
+ENDPOINT: GET http://localhost:3000/character/get-character/:id
+PURPOSE: Fetches a character by 'id'
+PARAMS: {
+   id:  INT (unique character id included in the URL path)
+}
+RESPONSE: {
+    message: STRING (confirmation message),
+    character: JSON (requested character info)
+}
+----------------------------------------------------------------
 
 ### ORIGINAL INSTRUCTIONS
 # DDB Back End Developer Challenge

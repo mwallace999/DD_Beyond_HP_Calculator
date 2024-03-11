@@ -22,7 +22,7 @@ export const addTempHp = (id, tempHp) => {
     activeChar.tempHp = Math.max(tempHp, activeChar.tempHp);
     message += `${activeChar.name} now has ${activeChar.tempHp} TempHp.`;
   }
-  // Log actions
+  // Log actions & send response
   console.log(message);
   return { message, character: activeChar }
 }
@@ -56,7 +56,7 @@ export const heal = (id, health) => {
     // Check if character has been healed to max health.
     if (activeChar.currHp === activeChar.maxHp)  message += `${activeChar.name} is now at MAX health. `
   }
-  // Log actions
+  // Log actions & send response
   console.log(message);
   return { message, character: activeChar }
 }
@@ -145,7 +145,7 @@ export const dealDamage = (id, damage, type, isCrit) => {
       activeChar.currHp = newHp;
     }
   }
-  // Log actions
+  // Log actions & send response
   console.log(message);
   return { message, character: activeChar }
 }
