@@ -1,5 +1,6 @@
 {
   "name": "ddb-back-end-developer-challenge",
+  "type": "module",
   "version": "1.0.0",
   "description": "MARK WALLACE - DDB Back End Developer Challenge",
   "main": "index.js",
