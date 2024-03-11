@@ -1,14 +1,16 @@
 ### INSTRUCTIONS
 
 `npm install` Installs node module dependencies
-`npm start` Runs the app in a production environment on localhost
-`npm run dev` Runs the app in a development environment using nodemon to monitor file changes
+`npm start` Runs the app in a production environment on localhost:3000
+`npm test` Runs jest test suite defined in 'tests/api.test.js' on localhost:3001
+
+NOTE: `npm run dev` Runs the app in a development environment using nodemon to monitor file changes
 
 ### NOTES
 
 Changes to briv.json:
 - Changed structure to array of character jsons instead of a single character
-- Added 'id' field as primary key in place of 'name'
+- Added 'id' field as primary key in place of 'name'. NOTE: Briv is id = 1
 - Added fields: 'tempHp', 'conditions', 'deathSaves', 'deathFails'
 - Changed field 'hitPoints' --> 'currHp' / 'maxHp'
 - Changed 'defenses' object to separate 'resistances', 'immunities', 'vulnerabilities' fields

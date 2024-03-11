@@ -1,7 +1,8 @@
 import express from 'express';
 import routes from './routes/index.js';
 const app = express();
-const port = process.env.PORT || 3000;
+// Assign different ports for server and testing
+const port = process.env.NODE_ENV === 'test' ? process.env.TEST_PORT || 3001 : process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -11,3 +12,4 @@ app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
+export default app;

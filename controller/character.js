@@ -109,12 +109,12 @@ export const dealDamage = (character, damage, type, isCrit) => {
       removeCondition(character, 'Unconscious');
       addCondition(character, 'Dead');
     }
-    // Handle damage to an Unconcious character
+    // Handle damage to an Unconscious character
     else if (character.currHp === 0) {
       // Check if critical and increase Death Saves
       character.deathFails += isCrit ? 2 : 1;
-      message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while unconcious and fails ${isCrit ? 2 : 1} Death Saves. `
-      message += `${character.name} now has ${Math.min(character.deathFails, 3)} failed Death Saves. `
+      message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while Unconscious and fails ${isCrit ? 2 : 1} Death Save(s). `
+      message += `${character.name} now has ${Math.min(character.deathFails, 3)} failed Death Save(s). `
       // Check if Dead
       if (character.deathFails >= 3) {
         message += `${character.name} has died. RIP. `
@@ -126,7 +126,7 @@ export const dealDamage = (character, damage, type, isCrit) => {
     }
     // Handle reducing character to 0 HP
     else if (newHp <= 0) {
-      message += `${character.name} is reduced to 0 HP and falls unconcious. `
+      message += `${character.name} is reduced to 0 HP and falls Unconscious. `
       character.currHp = 0;
       addCondition(character, 'Unconscious');
     } 
