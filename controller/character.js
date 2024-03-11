@@ -9,6 +9,9 @@ export const addCondition = (char, condition) => !char.conditions.includes(condi
 // *** ADD TEMP HP ***
 export const addTempHp = (id, tempHp) => {
   const activeChar = getCharacter(id);
+
+  // Check for valid character
+  if (!activeChar) return { message: `No character found with ID ${id}.`, character: null };
   let message = `${activeChar.name} gains ${tempHp} tempHp. `;
 
   // Check if character is Dead
@@ -30,6 +33,9 @@ export const addTempHp = (id, tempHp) => {
 // *** HEAL ***
 export const heal = (id, health) => {
   const activeChar = getCharacter(id);
+
+  // Check for valid character
+  if (!activeChar) return { message: `No character found with ID ${id}.`, character: null };
   let message = `${activeChar.name} gets healed for ${health} HP. `;
 
   // Check if character is at max health
@@ -64,6 +70,9 @@ export const heal = (id, health) => {
 // *** DEAL DAMAGE ***
 export const dealDamage = (id, damage, type, isCrit) => {
   const activeChar = getCharacter(id);
+
+  // Check for valid character
+  if (!activeChar) return { message: `No character found with ID ${id}.`, character: null };
   let message = `${activeChar.name} is attacked with ${damage} point(s) of ${type} damage. `;
   let modDamage = damage;
 
