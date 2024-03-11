@@ -67,7 +67,7 @@
       "wisdom": 10,
       "charisma": 8
     },
-    "immunities": [],
+    "immunities": ["Cold"],
     "resistances": ["Fire"],
     "vulnerabilites": [],
     "conditions": [],
