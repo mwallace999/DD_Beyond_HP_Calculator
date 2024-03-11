@@ -2,7 +2,7 @@ import express from 'express';
 import { getCharacter, dealDamage, heal, addTempHp } from '../controller/character.js';
 const router = express.Router();
 
-const damageTypes = ['Piercing', 'Slashing', 'Fire', 'Cold', 'Acid', 'Thunder', 'Lightning', 'Poison', 'Radiant', 'Necrotic', 'Psychic', 'Force'];
+const damageTypes = ['Piercing', 'Slashing', 'Bludgeoning', 'Fire', 'Cold', 'Acid', 'Thunder', 'Lightning', 'Poison', 'Radiant', 'Necrotic', 'Psychic', 'Force'];
 
 const validateCharacterId = (id) => {
   const character = getCharacter(Number(id));

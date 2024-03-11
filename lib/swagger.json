@@ -1,0 +1,416 @@
+{
+"swagger": "2.0",
+"info": {
+  "title": "D&D Beyond Character API - Mark Wallace",
+  "version": "1.0.0",
+  "description": "API for managing character data"
+},
+"paths": {
+  "/character/get-character/{id}": {
+    "get": {
+      "summary": "Get character data by ID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "ID of the character",
+          "required": true,
+          "type": "integer"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "A descriptive message indicating the success of the operation."
+              },
+              "character": {
+                "type": "object",
+                "description": "The character data retrieved based on the provided ID.",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "The unique identifier of the character."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the character."
+                  },
+                  "level": {
+                    "type": "integer",
+                    "description": "The level of the character."
+                  },
+                  "currHp": {
+                    "type": "integer",
+                    "description": "The current hit points of the character."
+                  },
+                  "maxHp": {
+                    "type": "integer",
+                    "description": "The maximum hit points of the character."
+                  },
+                  "tempHp": {
+                    "type": "integer",
+                    "description": "The temporary hit points of the character."
+                  },
+                  "deathSaves": {
+                    "type": "integer",
+                    "description": "The number of successful death saves of the character."
+                  },
+                  "deathFails": {
+                    "type": "integer",
+                    "description": "The number of failed death saves of the character."
+                  },
+                  "classes": {
+                    "type": "array",
+                    "description": "An array of classes the character belongs to.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "class": {
+                          "type": "string",
+                          "description": "The name of the character's class."
+                        },
+                        "hitDiceValue": {
+                          "type": "integer",
+                          "description": "The hit dice value of the character's class."
+                        },
+                        "classLevel": {
+                          "type": "integer",
+                          "description": "The level of the character in the class."
+                        }
+                      }
+                    }
+                  },
+                  "stats": {
+                    "type": "object",
+                    "description": "The statistics of the character.",
+                    "properties": {
+                      "strength": { "type": "integer", "description": "Strength stat of the character." },
+                      "dexterity": { "type": "integer", "description": "Dexterity stat of the character." },
+                      "constitution": { "type": "integer", "description": "Constitution stat of the character." },
+                      "intelligence": { "type": "integer", "description": "Intelligence stat of the character." },
+                      "wisdom": { "type": "integer", "description": "Wisdom stat of the character." },
+                      "charisma": { "type": "integer", "description": "Charisma stat of the character." }
+                    }
+                  },
+                  "immunities": {
+                    "type": "array",
+                    "description": "An array of immunities the character has.",
+                    "items": { "type": "string" }
+                  },
+                  "resistances": {
+                    "type": "array",
+                    "description": "An array of resistances the character has.",
+                    "items": { "type": "string" }
+                  },
+                  "vulnerabilities": {
+                    "type": "array",
+                    "description": "An array of vulnerabilities the character has.",
+                    "items": { "type": "string" }
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "description": "An array of conditions the character currently has.",
+                    "items": { "type": "string" }
+                  },
+                  "items": {
+                    "type": "array",
+                    "description": "An array of items the character possesses.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string", "description": "Name of the item." },
+                        "modifier": {
+                          "type": "object",
+                          "description": "Any modifiers applied by the item."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "description": "A descriptive error message indicating the reason for the bad request."
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error": "No character found with ID 0."
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "description": "A descriptive error message indicating the internal server error."
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error": "Internal Server Error."
+            }
+          }
+        }
+      }
+    }
+  },
+  "/character/deal-damage": {
+    "post": {
+      "summary": "Deal damage to a character",
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "Damage details",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "ID of the character",
+                "required": true
+              },
+              "damage": {
+                "type": "integer",
+                "description": "Amount of damage dealt",
+                "required": true
+              },
+              "type": {
+                "type": "string",
+                "description": "Type of damage",
+                "enum": ["Piercing", "Slashing", "Bludgeoning", "Fire", "Cold", "Acid", "Thunder", "Lightning", "Poison", "Radiant", "Necrotic", "Psychic", "Force"],
+                "required": true
+              },
+              "isCrit": {
+                "description": "Is it a Critical Hit?",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "character": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string"
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error1": "No character found with ID 0.",
+              "error2": "Damage value must be an integer.",
+              "error3": "'X' is not a valid damage type."
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string"
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error": "Internal Server Error."
+            }
+          }
+        }
+      }
+    }
+  },
+  "/character/heal": {
+    "post": {
+      "summary": "Heal a character",
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "Healing details",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "required": true
+              },
+              "health": {
+                "type": "integer",
+                "required": true
+              }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "character": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string"
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error1": "No character found with ID 0.",
+              "error2": "Health value must be an integer."
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string"
+              }
+            }
+          },
+          "examples": {
+            "application/json": {
+              "error": "Internal Server Error."
+            }
+          }
+        }
+      }
+    }
+  },
+  "/character/add-temp-hp": {
+    "post": {
+      "summary": "Give a character temporary HP",
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "Temporary HP details",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "required": true
+              },
+              "tempHp": {
+                "type": "integer",
+                "required": true
+              }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "schema": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                  },
+                  "character": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "application/json": {
+                  "error1": "No character found with ID 0.",
+                  "error2": "TempHp value must be an integer."
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "application/json": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

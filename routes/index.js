@@ -3,6 +3,7 @@ import character from './character.js'
 
 const router = express.Router();
 
+// Utilize the 'character' router to handle API endpoints that modify characters
 router.use('/character', character);
 
 // Test endpoint
