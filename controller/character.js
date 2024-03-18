@@ -1,25 +1,21 @@
-import { characters } from '../lib/characterReader.js';
-
-export const getCharacter = (id) => characters.find(char => char.id === id);
-
 export const removeCondition = (char, condition) => char.conditions = char.conditions.filter(cond => cond !== condition);
 
 export const addCondition = (char, condition) => !char.conditions.includes(condition) && char.conditions.push(condition);
 
 // *** ADD TEMP HP ***
-export const addTempHp = (character, tempHp) => {
-  let message = `${character.name} gains ${tempHp} tempHp. `;
+export const addTempHp = (character, temphp) => {
+  let message = `${character.name} gains ${temphp} temphp. `;
 
   // Check if character is Dead
   if (character.conditions.includes('Dead')) {
-    message += `${character.name} is Dead and cannot receive tempHp. `;
+    message += `${character.name} is Dead and cannot receive temphp. `;
   } 
-  // Check if current tempHp is greater than new tempHp
-  else if (character.tempHp > tempHp) message += `${character.name} already has a greater number of TempHp (${character.tempHp}). `;
-  // Update tempHp
+  // Check if current temphp is greater than new temphp
+  else if (character.temphp > temphp) message += `${character.name} already has a greater number of TempHp (${character.temphp}). `;
+  // Update temphp
   else {
-    character.tempHp = tempHp;
-    message += `${character.name} now has ${character.tempHp} TempHp.`;
+    character.temphp = temphp;
+    message += `${character.name} now has ${character.temphp} TempHp.`;
   }
   // Log actions & send response
   console.log(message);
@@ -31,8 +27,8 @@ export const heal = (character, health) => {
   let message = `${character.name} gets healed for ${health} HP. `;
 
   // Check if character is at max health
-  if (character.currHp === character.maxHp) {
-    message += `${character.name} is already at MAX health (${character.currHp} HP). `;
+  if (character.currhp === character.maxhp) {
+    message += `${character.name} is already at MAX health (${character.currhp} HP). `;
   }
   // Check if character is Dead
   else if (character.conditions.includes('Dead')) {
@@ -41,18 +37,18 @@ export const heal = (character, health) => {
   // Heal character
   else {
     // Check if character was unconscious
-    if (character.currHp === 0)  {
+    if (character.currhp === 0)  {
       // Remove unconscious condition and reset death saves
       removeCondition(character, 'Unconscious');
-      character.deathFails = 0;
-      character.deathSaves = 0;
+      character.deathfails = 0;
+      character.deathsaves = 0;
       message += `${character.name} regains consciousness. `;
     }
-    // Update currHp
-    character.currHp = Math.min(character.currHp + health, character.maxHp);
-    message += `${character.name} was healed to ${character.currHp} HP. `;
+    // Update currhp
+    character.currhp = Math.min(character.currhp + health, character.maxhp);
+    message += `${character.name} was healed to ${character.currhp} HP. `;
     // Check if character has been healed to max health.
-    if (character.currHp === character.maxHp)  message += `${character.name} is now at MAX health. `
+    if (character.currhp === character.maxhp)  message += `${character.name} is now at MAX health. `
   }
   // Log actions & send response
   console.log(message);
@@ -61,6 +57,7 @@ export const heal = (character, health) => {
 
 // *** DEAL DAMAGE ***
 export const dealDamage = (character, damage, type, isCrit) => {
+
   let message = `${character.name} is attacked with ${damage} point(s) of ${type} damage. `;
 
   // Calculate modified damage
@@ -70,7 +67,7 @@ export const dealDamage = (character, damage, type, isCrit) => {
     message += `${character.name} is resistant to ${type} damage. Incoming damage is halved to ${damage}. `;
   }
   // Check vulnerabilities
-  if (character.vulnerabilites.includes(type)) {
+  if (character.vulnerabilities.includes(type)) {
     damage *= 2;
     message += `${character.name} is vulnerable to ${type} damage. Incoming damage is doubled to ${damage}. `;
   }
@@ -80,46 +77,46 @@ export const dealDamage = (character, damage, type, isCrit) => {
     message += `${character.name} is immune to ${type} damage. No damage is taken. `;
   }
 
-  // Handle tempHp if applicable
-  if (damage && character.tempHp) {
-    // Determine new tempHp value
-    const newTempHp = Math.max(character.tempHp - damage, 0);
-    message += `${character.tempHp - newTempHp} point(s) of damage are absorbed by tempHp. ${newTempHp} tempHp remaining. `;
+  // Handle temphp if applicable
+  if (damage && character.temphp) {
+    // Determine new temphp value
+    const newTempHp = Math.max(character.temphp - damage, 0);
+    message += `${character.temphp - newTempHp} point(s) of damage are absorbed by temphp. ${newTempHp} temphp remaining. `;
     // Determine remaining damage value
-    damage = Math.max(damage - character.tempHp, 0);
-    // Update tempHp
-    character.tempHp = newTempHp;
+    damage = Math.max(damage - character.temphp, 0);
+    // Update temphp
+    character.temphp = newTempHp;
   }
   
   // Handle remaining damage
   if (damage) {
     message += `${character.name} takes ${damage} point(s) of ${type} damage. `
-    const newHp = character.currHp - damage;
+    const newHp = character.currhp - damage;
 
     // Handle damage to a Dead character
     if (character.conditions.includes('Dead')) {
       message += `${character.name} is already Dead.`
     }
     // Handle massive damage/instant death
-    else if (Math.abs(newHp) > character.maxHp) {
+    else if (Math.abs(newHp) > character.maxhp) {
       message += `${character.name} suffers massive damage and dies instantly. RIP. `
-      character.currHp = 0;
-      character.deathFails = 0;
-      character.deathSaves = 0;
+      character.currhp = 0;
+      character.deathfails = 0;
+      character.deathsaves = 0;
       removeCondition(character, 'Unconscious');
       addCondition(character, 'Dead');
     }
     // Handle damage to an Unconscious character
-    else if (character.currHp === 0) {
+    else if (character.currhp === 0) {
       // Check if critical and increase Death Saves
-      character.deathFails += isCrit ? 2 : 1;
+      character.deathfails += isCrit ? 2 : 1;
       message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while Unconscious and fails ${isCrit ? 2 : 1} Death Save(s). `
-      message += `${character.name} now has ${Math.min(character.deathFails, 3)} failed Death Save(s). `
+      message += `${character.name} now has ${Math.min(character.deathfails, 3)} failed Death Save(s). `
       // Check if Dead
-      if (character.deathFails >= 3) {
+      if (character.deathfails >= 3) {
         message += `${character.name} has died. RIP. `
-        character.deathFails = 0;
-        character.deathSaves = 0;
+        character.deathfails = 0;
+        character.deathsaves = 0;
         removeCondition(character, 'Unconscious');
         addCondition(character, 'Dead');
       }
@@ -127,13 +124,13 @@ export const dealDamage = (character, damage, type, isCrit) => {
     // Handle reducing character to 0 HP
     else if (newHp <= 0) {
       message += `${character.name} is reduced to 0 HP and falls Unconscious. `
-      character.currHp = 0;
+      character.currhp = 0;
       addCondition(character, 'Unconscious');
     } 
     // Handle normal damage
     else {
       message += `${character.name} is reduced to ${newHp} HP. `
-      character.currHp = newHp;
+      character.currhp = newHp;
     }
   }
   // Log actions & send response

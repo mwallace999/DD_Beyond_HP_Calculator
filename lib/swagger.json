@@ -44,23 +44,23 @@
                     "type": "integer",
                     "description": "The level of the character."
                   },
-                  "currHp": {
+                  "currhp": {
                     "type": "integer",
                     "description": "The current hit points of the character."
                   },
-                  "maxHp": {
+                  "maxhp": {
                     "type": "integer",
                     "description": "The maximum hit points of the character."
                   },
-                  "tempHp": {
+                  "temphp": {
                     "type": "integer",
                     "description": "The temporary hit points of the character."
                   },
-                  "deathSaves": {
+                  "deathsaves": {
                     "type": "integer",
                     "description": "The number of successful death saves of the character."
                   },
-                  "deathFails": {
+                  "deathfails": {
                     "type": "integer",
                     "description": "The number of failed death saves of the character."
                   },
@@ -352,7 +352,7 @@
                 "type": "integer",
                 "required": true
               },
-              "tempHp": {
+              "temphp": {
                 "type": "integer",
                 "required": true
               }

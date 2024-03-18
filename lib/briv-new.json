@@ -3,11 +3,11 @@
     "id": 1,
     "name": "Briv",
     "level": 5,
-    "currHp": 25,
-    "maxHp": 30,
-    "tempHp": 0,
-    "deathSaves": 0,
-    "deathFails": 0,
+    "currhp": 25,
+    "maxhp": 30,
+    "temphp": 0,
+    "deathsaves": 0,
+    "deathfails": 0,
     "classes": [
       {
         "class": "Fighter",
@@ -25,7 +25,7 @@
     },
     "immunities": ["Cold"],
     "resistances": ["Fire"],
-    "vulnerabilites": ["Acid"],
+    "vulnerabilities": ["Acid"],
     "conditions": [],
     "items":[
       {
@@ -42,11 +42,11 @@
     "id": 2,
     "name": "Lux",
     "level": 5,
-    "currHp": 34,
-    "maxHp": 34,
-    "tempHp": 10,
-    "deathSaves": 0,
-    "deathFails": 0,
+    "currhp": 34,
+    "maxhp": 34,
+    "temphp": 10,
+    "deathsaves": 0,
+    "deathfails": 0,
     "classes": [
       {
         "class": "Rogue",
@@ -69,7 +69,7 @@
     },
     "immunities": ["Cold"],
     "resistances": ["Fire"],
-    "vulnerabilites": [],
+    "vulnerabilities": [],
     "conditions": [],
     "items":[
       {

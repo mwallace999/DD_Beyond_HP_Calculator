@@ -14,17 +14,17 @@ describe('API Endpoint Tests', () => {
     expect(response.body.character.name).toBe('Briv');
   });
 
-  test('POST /character/add-temp-hp - Should add tempHp', async () => {
+  test('POST /character/add-temp-hp - Should add temphp', async () => {
     const requestData = {
       id: 1,
-      tempHp: 10
+      temphp: 10
     };
     const response = await supertest(app).post('/character/add-temp-hp').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.tempHp).toBe(10);
+    expect(response.body.character.temphp).toBe(10);
   });
 
-  test('POST /character/deal-damage - Should deal damage to tempHP and currHp', async () => {
+  test('POST /character/deal-damage - Should deal damage to tempHP and currhp', async () => {
     const requestData = {
       id: 1,
       damage: 15,
@@ -42,7 +42,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/heal').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(30);
+    expect(response.body.character.currhp).toBe(30);
   });
 
   test('POST /character/deal-damage - Should deal damage testing character Resistance', async () => {
@@ -54,7 +54,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(20);
+    expect(response.body.character.currhp).toBe(20);
   });
 
   test('POST /character/deal-damage - Should deal damage testing character Immunity', async () => {
@@ -66,7 +66,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(20);
+    expect(response.body.character.currhp).toBe(20);
   });
 
   test('POST /character/deal-damage - Should deal damage testing character Vulnerability', async () => {
@@ -78,7 +78,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(10);
+    expect(response.body.character.currhp).toBe(10);
   });
 
   test('POST /character/deal-damage - Should deal damage reducing character to 0 HP and apply the Unconscious condition', async () => {
@@ -90,7 +90,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
+    expect(response.body.character.currhp).toBe(0);
     expect(response.body.character.conditions).toContain('Unconscious');
   });
 
@@ -103,8 +103,8 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
-    expect(response.body.character.deathFails).toBe(1);
+    expect(response.body.character.currhp).toBe(0);
+    expect(response.body.character.deathfails).toBe(1);
   });
 
   test('POST /character/heal - Should heal chacacter with 0 HP, remove the Unconscious condition, and reset DeathFails', async () => {
@@ -114,9 +114,9 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/heal').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(15);
+    expect(response.body.character.currhp).toBe(15);
     expect(response.body.character.conditions).not.toContain('Unconscious');
-    expect(response.body.character.deathFails).toBe(0);
+    expect(response.body.character.deathfails).toBe(0);
   });
 
   test('POST /character/deal-damage - Should deal damage reducing character to 0 HP and apply the Unconscious condition', async () => {
@@ -128,7 +128,7 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
+    expect(response.body.character.currhp).toBe(0);
     expect(response.body.character.conditions).toContain('Unconscious');
   });
 
@@ -141,8 +141,8 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
-    expect(response.body.character.deathFails).toBe(2);
+    expect(response.body.character.currhp).toBe(0);
+    expect(response.body.character.deathfails).toBe(2);
   });
 
   test('POST /character/deal-damage - Should deal damage to Unconscious character with 2 DeathFails resulting in death, apply the Dead condition, remove the Unconscious condition, and reset DeathFails', async () => {
@@ -154,10 +154,10 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
+    expect(response.body.character.currhp).toBe(0);
     expect(response.body.character.conditions).toContain('Dead');
     expect(response.body.character.conditions).not.toContain('Unconscious');
-    expect(response.body.character.deathFails).toBe(0);
+    expect(response.body.character.deathfails).toBe(0);
   });
 
   test('POST /character/heal - Should not be able to heal Dead character', async () => {
@@ -168,18 +168,18 @@ describe('API Endpoint Tests', () => {
     const response = await supertest(app).post('/character/heal').send(requestData);
     expect(response.status).toBe(200);
     expect(response.body.character.conditions).toContain('Dead');
-    expect(response.body.character.currHp).toBe(0);
+    expect(response.body.character.currhp).toBe(0);
   });
 
   test('POST /character/add-temp-hp - Should not be able to heal Dead character', async () => {
     const requestData = {
       id: 1,
-      tempHp: 15
+      temphp: 15
     };
     const response = await supertest(app).post('/character/add-temp-hp').send(requestData);
     expect(response.status).toBe(200);
     expect(response.body.character.conditions).toContain('Dead');
-    expect(response.body.character.tempHp).toBe(0);
+    expect(response.body.character.temphp).toBe(0);
   });
 
   test('POST /character/deal-damage - Should deal massive damage resulting in instant death', async () => {
@@ -191,10 +191,10 @@ describe('API Endpoint Tests', () => {
     };
     const response = await supertest(app).post('/character/deal-damage').send(requestData);
     expect(response.status).toBe(200);
-    expect(response.body.character.currHp).toBe(0);
+    expect(response.body.character.currhp).toBe(0);
     expect(response.body.character.conditions).toContain('Dead');
     expect(response.body.character.conditions).not.toContain('Unconscious');
-    expect(response.body.character.deathFails).toBe(0);
+    expect(response.body.character.deathfails).toBe(0);
   });
 
 });

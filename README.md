@@ -14,8 +14,8 @@ Changes to briv.json:
 - Changed structure to array of character jsons instead of a single character
 - Added 'id' field as primary key in place of 'name'.
   NOTE: Briv is id = 1
-- Added fields: 'tempHp', 'conditions', 'deathSaves', 'deathFails'
-- Changed field 'hitPoints' --> 'currHp' / 'maxHp'
+- Added fields: 'temphp', 'conditions', 'deathsaves', 'deathfails'
+- Changed field 'hitPoints' --> 'currhp' / 'maxhp'
 - Changed 'defenses' object to separate 'resistances', 'immunities', 'vulnerabilities' fields
 
 ### ENDPOINTS
@@ -47,14 +47,14 @@ RESPONSE: {
 __________________________________________________________
 
 POST http://localhost:3000/character/add-temp-hp  
-PURPOSE: Handles granting tempHp to a character  
+PURPOSE: Handles granting temphp to a character  
 PAYLOAD: {  
     id: INT (unique character id),  
-    tempHp: INT (value of tempHp being granted),  
+    temphp: INT (value of temphp being granted),  
 }  
 RESPONSE: {  
-    message: STRING (record of resulting effects from granting tempHp),  
-    character: JSON (character state after tempHp is resolved)  
+    message: STRING (record of resulting effects from granting temphp),  
+    character: JSON (character state after temphp is resolved)  
 }  
 __________________________________________________________
 
