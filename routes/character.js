@@ -1,6 +1,6 @@
 import express from 'express';
 import { dealDamage, heal, addTempHp } from '../controller/character.js';
-import { getOne, saveOne } from '../model/character.js'
+import { getOne, saveOne } from '../model/character.js';
 
 const router = express.Router();
 

@@ -197,4 +197,10 @@ describe('API Endpoint Tests', () => {
     expect(response.body.character.deathfails).toBe(0);
   });
 
+  // Reset DB to original state
+  test('POST /reset-db - Database Reset', async () => {
+    const response = await supertest(app).post('/reset-db');
+    expect(response.status).toBe(200);
+  });
+
 });
