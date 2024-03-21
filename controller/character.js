@@ -1,9 +1,22 @@
+import { getOne, saveOne } from '../model/character.js';
+
 export const removeCondition = (char, condition) => char.conditions = char.conditions.filter(cond => cond !== condition);
 
 export const addCondition = (char, condition) => !char.conditions.includes(condition) && char.conditions.push(condition);
 
+// *** GET CHARACTER ***
+export const getCharacter = async (id) => {
+  try {
+    const character = await getOne(id);
+    return character;
+  } catch (error) {
+    console.error(`Error retrieving character with ID ${id}:`, error);
+    throw new Error(`Failed to retrieve character with ID ${id}.`);
+  }
+};
+
 // *** ADD TEMP HP ***
-export const addTempHp = (character, temphp) => {
+export const addTempHp = async (character, temphp) => {
   let message = `${character.name} gains ${temphp} temphp. `;
 
   // Check if character is Dead
@@ -17,13 +30,23 @@ export const addTempHp = (character, temphp) => {
     character.temphp = temphp;
     message += `${character.name} now has ${character.temphp} TempHp.`;
   }
+
+  // Save updated character to db
+  try {
+    character = await saveOne(character);
+  } catch (error) {
+    console.error('Error updating character:', error);
+    throw new Error('Failed to update character.');
+  }
+
   // Log actions & send response
   console.log(message);
+  console.log(character);
   return { message, character }
 }
   
 // *** HEAL ***
-export const heal = (character, health) => {
+export const heal = async (character, health) => {
   let message = `${character.name} gets healed for ${health} HP. `;
 
   // Check if character is at max health
@@ -48,15 +71,23 @@ export const heal = (character, health) => {
     character.currhp = Math.min(character.currhp + health, character.maxhp);
     message += `${character.name} was healed to ${character.currhp} HP. `;
     // Check if character has been healed to max health.
-    if (character.currhp === character.maxhp)  message += `${character.name} is now at MAX health. `
+    if (character.currhp === character.maxhp)  message += `${character.name} is now at MAX health. `;
+  }
+  // Save updated character to db
+  try {
+    character = await saveOne(character);
+  } catch (error) {
+    console.error('Error updating character:', error);
+    throw new Error('Failed to update character.');
   }
   // Log actions & send response
   console.log(message);
+  console.log(character);
   return { message, character }
 }
 
 // *** DEAL DAMAGE ***
-export const dealDamage = (character, damage, type, isCrit) => {
+export const dealDamage = async (character, damage, type, isCrit) => {
 
   let message = `${character.name} is attacked with ${damage} point(s) of ${type} damage. `;
 
@@ -90,7 +121,7 @@ export const dealDamage = (character, damage, type, isCrit) => {
   
   // Handle remaining damage
   if (damage) {
-    message += `${character.name} takes ${damage} point(s) of ${type} damage. `
+    message += `${character.name} takes ${damage} point(s) of ${type} damage. `;
     const newHp = character.currhp - damage;
 
     // Handle damage to a Dead character
@@ -99,7 +130,7 @@ export const dealDamage = (character, damage, type, isCrit) => {
     }
     // Handle massive damage/instant death
     else if (Math.abs(newHp) > character.maxhp) {
-      message += `${character.name} suffers massive damage and dies instantly. RIP. `
+      message += `${character.name} suffers massive damage and dies instantly. RIP. `;
       character.currhp = 0;
       character.deathfails = 0;
       character.deathsaves = 0;
@@ -110,8 +141,8 @@ export const dealDamage = (character, damage, type, isCrit) => {
     else if (character.currhp === 0) {
       // Check if critical and increase Death Saves
       character.deathfails += isCrit ? 2 : 1;
-      message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while Unconscious and fails ${isCrit ? 2 : 1} Death Save(s). `
-      message += `${character.name} now has ${Math.min(character.deathfails, 3)} failed Death Save(s). `
+      message += `${character.name} suffers a ${isCrit ? 'Critical ' : ''}Hit while Unconscious and fails ${isCrit ? 2 : 1} Death Save(s). `;
+      message += `${character.name} now has ${Math.min(character.deathfails, 3)} failed Death Save(s). `;
       // Check if Dead
       if (character.deathfails >= 3) {
         message += `${character.name} has died. RIP. `
@@ -123,17 +154,25 @@ export const dealDamage = (character, damage, type, isCrit) => {
     }
     // Handle reducing character to 0 HP
     else if (newHp <= 0) {
-      message += `${character.name} is reduced to 0 HP and falls Unconscious. `
+      message += `${character.name} is reduced to 0 HP and falls Unconscious. `;
       character.currhp = 0;
       addCondition(character, 'Unconscious');
     } 
     // Handle normal damage
     else {
-      message += `${character.name} is reduced to ${newHp} HP. `
+      message += `${character.name} is reduced to ${newHp} HP. `;
       character.currhp = newHp;
     }
   }
+  // Save updated character to db
+  try {
+    character = await saveOne(character);
+  } catch (error) {
+    console.error('Error updating character:', error);
+    throw new Error('Failed to update character.');
+  }
   // Log actions & send response
   console.log(message);
+  console.log(character);
   return { message, character }
 }

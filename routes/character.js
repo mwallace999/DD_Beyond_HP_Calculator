@@ -1,10 +1,9 @@
 import express from 'express';
-import { dealDamage, heal, addTempHp } from '../controller/character.js';
-import { getOne, saveOne } from '../model/character.js';
+import { dealDamage, heal, addTempHp, getCharacter } from '../controller/character.js';
 
 // *** Optional import characters from JSON ***
 // import { characters } from '../lib/characterReader.js';
-// export const getCharacter = (id) => characters.find(char => char.id === id);
+// export const getCharacterJson = (id) => characters.find(char => char.id === id);
 
 const router = express.Router();
 
@@ -13,8 +12,8 @@ const damageTypes = ['Piercing', 'Slashing', 'Bludgeoning', 'Fire', 'Cold', 'Aci
 const validateCharacterId = async (id) => {
   try {
     // Choose DB or JSON import
-    const character = await getOne(Number(id));     // *** Import from DB ***   
-    // const character = await getCharacter(Number(id));   // *** Import from JSON ***
+    const character = await getCharacter(Number(id));     // *** Import from DB ***
+    // const character = await getCharacterJson(Number(id));   // *** Import from JSON ***
     return character ? { character } : { error: `No character found with ID ${id}.` };
   } catch (error) {
     console.error('Error validating character ID:', error);
@@ -52,9 +51,7 @@ router.post('/deal-damage', async (req, res) => {
     // Validate damage value
     else if (!Number.isInteger(damage)) return res.status(400).json({ error: `Damage value must me an integer.` });
     // Call 'dealDamage' function
-    const result = dealDamage(character, damage, type, isCrit);
-    // Save update to db
-    await saveOne(result.character);
+    const result = await dealDamage(character, damage, type, isCrit);
     // Respond with message & updated character data - { message, character }
     res.json(result);
   } catch (error) {
@@ -74,9 +71,7 @@ router.post('/heal', async (req, res) => {
     // Validate damage value
     else if (!Number.isInteger(health)) return res.status(400).json({ error: `Health value must me an integer.` });
     // Call 'heal' function
-    const result = heal(character, health);
-    // Save update to db
-    await saveOne(result.character);
+    const result = await heal(character, health);
     // Respond with message & updated character data - { message, character }
     res.json(result);
   } catch (error) {
@@ -97,9 +92,7 @@ router.post('/add-temp-hp', async (req, res) => {
     // Validate damage value
     else if (!Number.isInteger(temphp)) return res.status(400).json({ error: `TempHp value must me an integer.` });
     // Call 'addTempHp' function
-    const result = addTempHp(character, temphp);
-    // Save update to db
-    await saveOne(result.character);
+    const result = await addTempHp(character, temphp);
     // Respond with message & updated character data - { message, character }
     res.json(result);
   } catch (error) {

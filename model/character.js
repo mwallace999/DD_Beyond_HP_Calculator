@@ -78,7 +78,6 @@ export async function saveOne(character) {
 
     try {
         const result = await client.query(query);
-        console.log('Updated character:', result.rows[0]);
         return result.rows[0];
     } catch (error) {
         console.error('Error inserting character:', error);
