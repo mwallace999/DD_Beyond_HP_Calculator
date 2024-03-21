@@ -2,13 +2,19 @@ import express from 'express';
 import { dealDamage, heal, addTempHp } from '../controller/character.js';
 import { getOne, saveOne } from '../model/character.js';
 
+// *** Optional import characters from JSON ***
+// import { characters } from '../lib/characterReader.js';
+// export const getCharacter = (id) => characters.find(char => char.id === id);
+
 const router = express.Router();
 
 const damageTypes = ['Piercing', 'Slashing', 'Bludgeoning', 'Fire', 'Cold', 'Acid', 'Thunder', 'Lightning', 'Poison', 'Radiant', 'Necrotic', 'Psychic', 'Force'];
 
 const validateCharacterId = async (id) => {
   try {
-    const character = await getOne(Number(id));    
+    // Choose DB or JSON import
+    const character = await getOne(Number(id));     // *** Import from DB ***   
+    // const character = await getCharacter(Number(id));   // *** Import from JSON ***
     return character ? { character } : { error: `No character found with ID ${id}.` };
   } catch (error) {
     console.error('Error validating character ID:', error);
